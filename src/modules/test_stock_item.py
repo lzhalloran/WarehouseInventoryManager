@@ -22,15 +22,15 @@ class TestStockItem:
     def create_valid_stock_item(self, request):
         return StockItem(request.param.get('identifier'), request.param.get('product'), request.param.get('location'))
 
-
-    def test_stock_item_initial_value(self):
+    @pytest.mark.parametrize('data', valid_test_data)
+    def test_stock_item_initial_value(self, data):
         identifier = 123456789
         product = 12054
         location = ["Room1", 4, 1]
 
-        item = StockItem(identifier, product, location)
+        item = StockItem(data.get('identifier'), data.get('product'), data.get('location'))
         assert [item.identifier, item.product, item.location] == [
-            identifier, product, location]
+            data.get('identifier'), data.get('product'), data.get('location')]
     
     def test_stock_item_valid_identifier(self, create_valid_stock_item):
         assert isinstance(create_valid_stock_item.identifier, int) 
@@ -43,7 +43,7 @@ class TestStockItem:
             item = StockItem()
     
     @pytest.mark.parametrize('invalid_data', invalid_test_data)
-    def test_stock_item_invalid_identifier(self, invalid_data):
+    def test_stock_item_invalid_arguments(self, invalid_data):
         with pytest.raises(ValueError):
             item = StockItem(invalid_data.get('identifier'), invalid_data.get('product'), invalid_data.get('location'))
 
