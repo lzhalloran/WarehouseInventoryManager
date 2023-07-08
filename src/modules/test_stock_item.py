@@ -15,7 +15,11 @@ class TestStockItem:
         {'identifier': 123456789, 'product':12948, 'location':[65, 4, 1]},
         {'identifier': 123456789, 'product':12948, 'location':[1, 4.0, 1]},
         {'identifier': 123456789, 'product':12948, 'location':["Room6", 4, "5"]},
-        {'identifier': 123456789, 'product':12948, 'location':["", 4, 5]}
+        {'identifier': 123456789, 'product':12948, 'location':["", 4, 5]},
+        {'identifier': -1, 'product': 23904243, 'location':["Room1", 2, 0]},
+        {'identifier': 1, 'product': -23904243, 'location':["Room1", 2, 0]},
+        {'identifier': 1, 'product': 23904243, 'location':["Room1", -2, 0]},
+        {'identifier': 1, 'product': 23904243, 'location':["Room1", 2, -0]}
     ]
 
     @pytest.fixture(scope='session', params=valid_test_data)
