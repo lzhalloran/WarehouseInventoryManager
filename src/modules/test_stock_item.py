@@ -71,3 +71,17 @@ class TestStockItem:
             item = StockItem(invalid_data.get('identifier'), 
                              invalid_data.get('product'), 
                              invalid_data.get('location'))
+
+
+    def test_stock_item_change_location(self, create_valid_stock_item):
+        new_location = ["Room5", 16, 4]
+        create_valid_stock_item.location = new_location
+        assert create_valid_stock_item.location == new_location
+    
+    def test_stock_item_change_identifier(self, create_valid_stock_item):
+        with pytest.raises(AttributeError):
+            create_valid_stock_item.identifier = 654
+
+    def test_stock_item_change_product(self, create_valid_stock_item):
+        with pytest.raises(AttributeError):
+            create_valid_stock_item.product = 321
