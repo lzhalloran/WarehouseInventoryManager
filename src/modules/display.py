@@ -35,3 +35,15 @@ def menu(_title: str, _subtitle: str, options):
     option(0, "Exit")
     print("\n" * (TERMINAL_HEIGHT - 13 - (2 * len(options))))
     print("=" * TERMINAL_WIDTH)
+
+def form(_title: str, _subtitle: str):
+    clear_screen()
+    title(_title)
+    if _subtitle != "":
+        subtitle(_subtitle)
+        print("\n" * 2)
+    else:
+        print("\n" * 4)
+    option(0, "Exit")
+    print("\n" * (TERMINAL_HEIGHT - 13))
+    print("=" * TERMINAL_WIDTH)

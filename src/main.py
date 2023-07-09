@@ -35,8 +35,11 @@ def report():
     pass
 
 
-def form():
-    pass
+def form(subtitle: str, function):
+    while True:
+        display.form(title, subtitle)
+        if int(input()) == 0:
+            break
 
 
 """
@@ -45,20 +48,22 @@ are selected, and arguments. menu function is called recursively so menus at
 greater depth are described first.
 """
 product_options = ["View Products",
-                   "Add Products",
+                   "Add Product",
                    "Edit Product",
                    "Remove Product"]
 product_option_functions = [[report, []],
-                            [form, []],
-                            [form, []],
-                            [form, []]]
+                            [form, [product_options[1], print]],
+                            [form, [product_options[2], print]],
+                            [form, [product_options[3], print]]]
 
 stock_options = ["View Stock",
                  "Add Stock",
+                 "Move Stock",
                  "Remove Stock"]
 stock_option_functions = [[report, []],
-                          [form, []],
-                          [form, []]]
+                          [form, [stock_options[1], print]],
+                          [form, [stock_options[2], print]],
+                          [form, [stock_options[3], print]]]
 
 options = ["Products",
            "Stock"]
