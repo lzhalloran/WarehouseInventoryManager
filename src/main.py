@@ -102,36 +102,75 @@ def remove_product(number: int):
         raise TypeError()
     elif products.get(number) is None:
         raise ValueError()
+    elif any(item.product == number for item in stock):
+        raise ValueError()
     del products[number]
 
 def get_products_2D_array():
     return [[key, value] for key, value in products.items()]
+
+def add_stock(number: int, product: int, room: str, row: int, height: int):
+    if any(item.identifier == number for item in stock):
+        raise ValueError()
+    if products.get(product) is None:
+        raise ValueError()
+    stock.append(stock_item.StockItem(number, product, [room, row, height]))
+
+def move_stock(number: int, room: str, row: int, height: int):
+    if not any(item.identifier == number for item in stock):
+        raise ValueError()
+    item_to_move = next(item for item in stock if item.identifier == number)
+    item_to_move.location = [room, row, height]
+
+def remove_stock(number: int):
+    if not any(item.identifier == number for item in stock):
+        raise ValueError()
+    item_to_remove = next(item for item in stock if item.identifier == number)
+    stock.remove(item_to_remove)
+
+def get_stock_2D_array():
+    return [[item.identifier, 
+             item.product,
+             products[item.product],
+             item.location[0], 
+             item.location[1], 
+             item.location[2]] for item in stock]
 
 """
 All of the menu options for the app, along with functions to call when options
 are selected, and arguments. menu function is called recursively so menus at 
 greater depth are described first.
 """
-add_product_inputs = ["Product Number",
+product_inputs = ["Product Number",
                       "Product Name"]
 
 product_options = ["View Products",
                    "Add Product",
                    "Edit Product",
                    "Remove Product"]
-product_option_functions = [[report, [product_options[0], add_product_inputs, get_products_2D_array]],
-                            [form, [product_options[1], add_product_inputs, add_product]],
-                            [form, [product_options[2], add_product_inputs, edit_product]],
-                            [form, [product_options[3], [add_product_inputs[0]], remove_product]]]
+product_option_functions = [[report, [product_options[0], product_inputs, get_products_2D_array]],
+                            [form, [product_options[1], product_inputs, add_product]],
+                            [form, [product_options[2], product_inputs, edit_product]],
+                            [form, [product_options[3], [product_inputs[0]], remove_product]]]
+
+stock_inputs = ["Item Number",
+                "Product",
+                "Room",
+                "Row",
+                "Height"]
+
+stock_inputs_with_product_name = stock_inputs.copy()
+stock_inputs_with_product_name[1] = "Product Number"
+stock_inputs_with_product_name.insert(2, "Product Name")
 
 stock_options = ["View Stock",
                  "Add Stock",
                  "Move Stock",
                  "Remove Stock"]
-stock_option_functions = [[report, []],
-                          [form, [stock_options[1], print]],
-                          [form, [stock_options[2], print]],
-                          [form, [stock_options[3], print]]]
+stock_option_functions = [[report, [stock_options[0], stock_inputs_with_product_name, get_stock_2D_array]],
+                          [form, [stock_options[1], stock_inputs, add_stock]],
+                          [form, [stock_options[2], [stock_inputs[0], stock_inputs[2], stock_inputs[3], stock_inputs[4]], move_stock]],
+                          [form, [stock_options[3], [stock_inputs[0]], remove_stock]]]
 
 options = ["Products",
            "Stock"]
