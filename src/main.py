@@ -35,8 +35,9 @@ def menu(subtitle: str, options, option_functions):
             break
 
 
-def report():
-    pass
+def report(subtitle: str, headings, content_function):
+    display.report(title, subtitle, headings, content_function())
+    input("Enter to continue: ")
 
 
 def form(subtitle: str, form_inputs, function):
@@ -73,7 +74,7 @@ def form(subtitle: str, form_inputs, function):
         try:
             function(*user_inputs)
         except (ValueError):
-            input("Values entered are not compatible, please try again:")
+            input("Values entered are not correct, please try again:")
             continue
         else:
             input("Successful!")
@@ -84,7 +85,19 @@ def add_product(number: int, name: str):
     if not isinstance(number, int) or not isinstance(name, str):
         raise ValueError()
     products[number] = name
-    report()
+
+def edit_product(number: int, name: str):
+    if not isinstance(number, int) or not isinstance(name, str) or products.get(number) is None:
+        raise ValueError()
+    products[number] = name
+
+def remove_product(number: int):
+    if not isinstance(number, int) or products.get(number) is None:
+        raise ValueError()
+    del products[number]
+
+def get_products_2D_array():
+    return [[key, value] for key, value in products.items()]
 
 """
 All of the menu options for the app, along with functions to call when options
@@ -98,10 +111,10 @@ product_options = ["View Products",
                    "Add Product",
                    "Edit Product",
                    "Remove Product"]
-product_option_functions = [[report, []],
+product_option_functions = [[report, [product_options[0], add_product_inputs, get_products_2D_array]],
                             [form, [product_options[1], add_product_inputs, add_product]],
-                            [form, [product_options[2], add_product_inputs, print]],
-                            [form, [product_options[3], add_product_inputs, print]]]
+                            [form, [product_options[2], add_product_inputs, edit_product]],
+                            [form, [product_options[3], [add_product_inputs[0]], remove_product]]]
 
 stock_options = ["View Stock",
                  "Add Stock",
