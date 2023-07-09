@@ -30,8 +30,8 @@ def menu(_title: str, _subtitle: str, options):
         print("\n" * 2)
     else:
         print("\n" * 4)
-    for option_index in range(len(options)):
-        option(option_index + 1, options[option_index])
+    for option_index, option_value in enumerate(options):
+        option(option_index + 1, option_value)
     option(0, "Exit")
     print("\n" * (TERMINAL_HEIGHT - 13 - (2 * len(options))))
     print("=" * TERMINAL_WIDTH)

@@ -1,53 +1,58 @@
+import modules.display as display
 import sys
 sys.path.append("modules")
-import modules.display as display
 
 title = "Warehouse Inventory Manager"
 
-def stock_menu():
+
+def menu(subtitle: str, options, option_functions):
     user_input = ""
-    options = ["View Stock", "Add Stock", "Remove Stock"]
     while True:
-        display.menu(title, "Stock", options)
+        display.menu(title, subtitle, options)
         try:
             user_input = int(input("Choose option: "))
-        except(ValueError):
+        except (ValueError):
             continue
 
-        match user_input:
-            case 0:
-                break
-
-def product_menu():
-    user_input = ""
-    options = ["View Products", "Add Products", "Edit Product", "Remove Product"]
-    while True:
-        display.menu(title, "Products", options)
-        try:
-            user_input = int(input("Choose option: "))
-        except(ValueError):
-            continue
-
-        match user_input:
-            case 0:
-                break
-
-user_input = ""
-options = ["Products", "Stock"]
-while True:
-    display.menu(title, "Main Menu", options)
-    try:
-        user_input = int(input("Choose option: "))
-    except(ValueError):
-        continue
-
-    match user_input:
-        case 1:
-            product_menu()
-        case 2:
-            stock_menu()
-        case 0:
+        if user_input in range(1, len(options) + 1):
+            option_functions[user_input -
+                             1][0](*option_functions[user_input - 1][1])
+        elif user_input == 0:
             break
 
 
-display.clear_screen()
+def report():
+    pass
+
+
+def form():
+    pass
+
+
+if __name__ == '__main__':
+    user_input = ""
+
+    product_options = ["View Products",
+                       "Add Products",
+                       "Edit Product",
+                       "Remove Product"]
+    product_option_functions = [[report, []],
+                                [form, []],
+                                [form, []],
+                                [form, []]]
+
+    stock_options = ["View Stock",
+                     "Add Stock",
+                     "Remove Stock"]
+    stock_option_functions = [[report, []],
+                              [form, []],
+                              [form, []]]
+
+    options = ["Products", 
+               "Stock"]
+    option_functions = [[menu, [options[0], product_options, product_option_functions]],
+                        [menu, [options[1], stock_options, stock_option_functions]]]
+
+    menu("Main Menu", options, option_functions)
+
+    display.clear_screen()
