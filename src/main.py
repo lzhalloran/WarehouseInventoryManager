@@ -74,8 +74,10 @@ def form(subtitle: str, form_inputs, function):
         try:
             function(*user_inputs)
         except (ValueError):
-            input("Values entered are not correct, please try again:")
+            input("Values entered are invalid, please try again: ")
             continue
+        except (TypeError):
+            input("One or more values are of wrong type, please try again: ")
         else:
             input("Successful!")
             break
@@ -83,16 +85,22 @@ def form(subtitle: str, form_inputs, function):
 
 def add_product(number: int, name: str):
     if not isinstance(number, int) or not isinstance(name, str):
+        raise TypeError()
+    elif products.get(number) is not None:
         raise ValueError()
     products[number] = name
 
 def edit_product(number: int, name: str):
-    if not isinstance(number, int) or not isinstance(name, str) or products.get(number) is None:
+    if not isinstance(number, int) or not isinstance(name, str):
+        raise TypeError()
+    elif products.get(number) is None:
         raise ValueError()
     products[number] = name
 
 def remove_product(number: int):
-    if not isinstance(number, int) or products.get(number) is None:
+    if not isinstance(number, int):
+        raise TypeError()
+    elif products.get(number) is None:
         raise ValueError()
     del products[number]
 
