@@ -1,9 +1,13 @@
-import modules.display as display
 import sys
 sys.path.append("modules")     # helps to import modules from main.py and tests
+import modules.display as display
+import modules.stock_item as stock_item
+
 
 title = "Warehouse Inventory Manager"
 
+stock = []
+products = {}
 
 # Functions to handle interfacing with application
 
@@ -35,26 +39,69 @@ def report():
     pass
 
 
-def form(subtitle: str, function):
+def form(subtitle: str, form_inputs, function):
     while True:
-        display.form(title, subtitle)
-        if int(input()) == 0:
+        user_inputs = []
+        for form_input_index, form_input in enumerate(form_inputs):
+            exit_flag = False
+            user_input = ""
+            while not exit_flag:
+                display.form(title, subtitle, form_inputs, form_input_index, user_inputs)
+                user_input = input("Enter value: ")
+                try:
+                    user_input = int(user_input)
+                except (ValueError):
+                    pass
+                else:
+                    if user_input == 0:
+                        exit_flag = True
+                break
+                
+            if exit_flag:
+                return
+            user_inputs.append(user_input)
+        display.form(title, subtitle, form_inputs, len(form_inputs), user_inputs)
+        user_input = input("Press enter to confirm or '0' to cancel: ")
+        try:
+            user_input = int(user_input)
+            if user_input == 0:
+                return
+        except (ValueError):
+            pass
+        
+        display.form(title, subtitle, form_inputs, len(form_inputs), user_inputs)
+        try:
+            function(*user_inputs)
+        except (ValueError):
+            input("Values entered are not compatible, please try again:")
+            continue
+        else:
+            input("Successful!")
             break
 
+
+def add_product(number: int, name: str):
+    if not isinstance(number, int) or not isinstance(name, str):
+        raise ValueError()
+    products[number] = name
+    report()
 
 """
 All of the menu options for the app, along with functions to call when options
 are selected, and arguments. menu function is called recursively so menus at 
 greater depth are described first.
 """
+add_product_inputs = ["Product Number",
+                      "Product Name"]
+
 product_options = ["View Products",
                    "Add Product",
                    "Edit Product",
                    "Remove Product"]
 product_option_functions = [[report, []],
-                            [form, [product_options[1], print]],
-                            [form, [product_options[2], print]],
-                            [form, [product_options[3], print]]]
+                            [form, [product_options[1], add_product_inputs, add_product]],
+                            [form, [product_options[2], add_product_inputs, print]],
+                            [form, [product_options[3], add_product_inputs, print]]]
 
 stock_options = ["View Stock",
                  "Add Stock",

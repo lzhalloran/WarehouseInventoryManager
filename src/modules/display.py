@@ -36,14 +36,24 @@ def menu(_title: str, _subtitle: str, options):
     print("\n" * (TERMINAL_HEIGHT - 13 - (2 * len(options))))
     print("=" * TERMINAL_WIDTH)
 
-def form(_title: str, _subtitle: str):
+def form(_title: str, _subtitle: str, inputs, input_index: int, user_inputs):
     clear_screen()
     title(_title)
+    line_counter = 0
     if _subtitle != "":
         subtitle(_subtitle)
         print("\n" * 2)
     else:
         print("\n" * 4)
+    for i in range(input_index):
+        print(" " * int((TERMINAL_WIDTH/2 - 12)) + f"{inputs[i]}: {user_inputs[i]}\n")
+        line_counter += 2
+    if input_index != len(inputs):
+        print(" " * int((TERMINAL_WIDTH/2 - 12)) + f"{inputs[input_index]}: _________\n")
+        line_counter += 2
+    
+    print("\n")
+    line_counter += 2
     option(0, "Exit")
-    print("\n" * (TERMINAL_HEIGHT - 13))
+    print("\n" * (TERMINAL_HEIGHT - 13 - line_counter))
     print("=" * TERMINAL_WIDTH)
