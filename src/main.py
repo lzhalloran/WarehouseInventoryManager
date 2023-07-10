@@ -1,10 +1,13 @@
 import sys
 sys.path.append("modules")     # helps to import modules from main.py and tests
+import csv
 import modules.display as display
 import modules.stock_item as stock_item
 
 
 title = "Warehouse Inventory Manager"
+stock_file_path = "data/stock.csv"
+products_file_path = "data/products.csv"
 
 stock = []
 products = {}
@@ -136,6 +139,48 @@ def get_stock_2D_array():
              item.location[1], 
              item.location[2]] for item in stock]
 
+def save_stock():
+    try:
+        with open(stock_file_path, 'w') as stock_file:
+            writer = csv.writer(stock_file)
+            for item in stock:
+                writer.writerow([item.identifier, 
+                                 item.product, 
+                                 item.location[0], 
+                                 item.location[1], 
+                                 item.location[2]])
+    except (FileNotFoundError):
+        return
+
+def load_stock():
+    try:
+        with open(stock_file_path) as stock_file:
+            reader = csv.reader(stock_file)
+            for row in reader:
+                stock.append(stock_item.StockItem(int(row[0]), 
+                                                  int(row[1]), 
+                                                  [row[2], int(row[3]), int(row[4])]))
+    except (FileNotFoundError):
+        return
+
+def save_products():
+    try:
+        with open(products_file_path, 'w') as products_file:
+            writer = csv.writer(products_file)
+            for key, value in products.items():
+                writer.writerow([key, value])
+    except (FileNotFoundError):
+        return
+
+def load_products():
+    try:
+        with open(products_file_path) as products_file:
+            reader = csv.reader(products_file)
+            for row in reader:
+                products[int(row[0])] = row[1]
+    except (FileNotFoundError):
+        return
+
 """
 All of the menu options for the app, along with functions to call when options
 are selected, and arguments. menu function is called recursively so menus at 
@@ -180,5 +225,9 @@ option_functions = [[menu, [options[0], product_options, product_option_function
 
 # Main block here
 if __name__ == '__main__':
+    load_products()
+    load_stock()
     menu("Main Menu", options, option_functions)
+    save_products()
+    save_stock()
     display.clear_screen()
