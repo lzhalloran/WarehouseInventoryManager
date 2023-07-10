@@ -59,6 +59,7 @@ def form(_title: str, _subtitle: str, inputs, input_index: int, user_inputs):
     print("=" * TERMINAL_WIDTH)
 
 def report(_title: str, _subtitle: str, headings, content):
+    printable_report = ""
     clear_screen()
     title(_title)
     if _subtitle != "":
@@ -73,12 +74,18 @@ def report(_title: str, _subtitle: str, headings, content):
         column_widths.append(max(item_lengths))
         heading_line += heading + " " * (column_widths[index] - len(heading) + 4)
     print(heading_line)
+    printable_report += "\n" + heading_line
     print("-" * TERMINAL_WIDTH)
+    printable_report += "\n" + "-" * TERMINAL_WIDTH
     for item in content:
         item_line = " "
         for index, data in enumerate(item):
             str_data = str(data)
             item_line += str_data + " " * (column_widths[index] - len(str_data) + 4)
         print(item_line)
+        printable_report += "\n" + item_line
     print("\n" * (TERMINAL_HEIGHT - 10 - len(content)))
     print("=" * TERMINAL_WIDTH)
+    printable_report += "\n" + "=" * TERMINAL_WIDTH
+    printable_report += "\n" + "End of Report."
+    return printable_report

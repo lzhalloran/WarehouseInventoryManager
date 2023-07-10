@@ -8,6 +8,7 @@ import modules.stock_item as stock_item
 title = "Warehouse Inventory Manager"
 stock_file_path = "data/stock.csv"
 products_file_path = "data/products.csv"
+report_file_path = "data/report.txt"
 
 stock = []
 products = {}
@@ -39,8 +40,21 @@ def menu(subtitle: str, options, option_functions):
 
 
 def report(subtitle: str, headings, content_function):
-    display.report(title, subtitle, headings, content_function())
-    input("Enter to continue: ")
+    printable = display.report(title, subtitle, headings, content_function())
+    user_input = input("Enter to continue, or 'p' to export to file: ")
+    if(user_input in ["p", "P"]):
+        save_report(printable)
+        printable = display.report(title, subtitle, headings, content_function())
+        input(f"Report saved to {report_file_path}")
+
+def save_report(printable: str):
+    try:
+        with open(report_file_path, 'w') as report_file:
+            report_file.write(printable)
+    except (FileNotFoundError):
+        return
+    
+
 
 
 def form(subtitle: str, form_inputs, function):
